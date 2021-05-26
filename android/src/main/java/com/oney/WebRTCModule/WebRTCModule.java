@@ -922,9 +922,19 @@ public class WebRTCModule extends ReactContextBaseJavaModule {
         PeerConnection peerConnection = getPeerConnection(id);
         Log.d(TAG, "peerConnectionAddICECandidate() start");
         if (peerConnection != null) {
+            String sdpMid;
+            int sdpMLineIndex;
+            try {
+                sdpMid = candidateMap.getString("sdpMid");
+                sdpMLineIndex = candidateMap.getInt("sdpMLineIndex");
+            } catch (Exception e) {
+                Log.d("%s", String.valueOf(e));
+                sdpMid = "";
+                sdpMLineIndex = 0;
+            }
             IceCandidate candidate = new IceCandidate(
-                    candidateMap.getString("sdpMid"),
-                    candidateMap.getInt("sdpMLineIndex"),
+                    sdpMid,
+                    sdpMLineIndex,
                     candidateMap.getString("candidate")
             );
             result = peerConnection.addIceCandidate(candidate);
